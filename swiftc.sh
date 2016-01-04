@@ -33,7 +33,8 @@ def hasArg(argName):
 def getArgValue(argName):
 	for i in range(1, len(sys.argv)):
 		if sys.argv[i] == argName:
-			return sys.argv[i+1]	
+			return sys.argv[i+1]
+	return None
 
 def makeSymLinkIfNeeded():
 	if not os.path.isfile(swiftSymLink):
@@ -45,8 +46,7 @@ def getProjectIntermediateDirectory():
 	return os.path.dirname(getArgValue("-emit-objc-header-path")) + "/"
 			
 def getModuleFile():
-	modulePath = getArgValue("-emit-module-path")
-	return modulePath.replace("swiftmodule", "o")
+	return "%s.o" % (getArgValue("-module-name"))
 
 def hasSwiftFileInInputArgument(swiftFile):
 	for arg in sys.argv:
