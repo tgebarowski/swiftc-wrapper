@@ -5,6 +5,8 @@
 # Wrapper for swift compiler, allowing to resolve issue with large Swift project and bug reported in:
 # https://bugs.swift.org/browse/SR-280
 #
+# More info: http://codica.pl/2015/12/25/taming-swift-compiler-bugs/
+#
 # INSTALL
 #
 # chmod +x swiftc.sh
