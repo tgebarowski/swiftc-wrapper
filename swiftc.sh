@@ -19,9 +19,16 @@ import os
 import os.path
 import sys
 import subprocess
+import shutil
 
 swiftSymLink = "/usr/local/bin/swiftc"
 scriptDir = os.path.dirname(os.path.abspath(__file__))
+
+def hasArg(argName):
+	for i in range(1, len(sys.argv)):
+		if sys.argv[i] == argName:
+			return True
+	return False
 
 def getArgValue(argName):
 	for i in range(1, len(sys.argv)):
@@ -65,16 +72,19 @@ def updateLinkFileList(dir, moduleFilePath):
 						if not hasSwiftFileInInputArgument(baseName + ".swift"):
 							newfile.write(line)
 				newfile.write(moduleFilePath + "\n")
-				os.rename(tmpFile, linkFilePath)
+			shutil.copy2(tmpFile, linkFilePath)
 			break
 	
 makeSymLinkIfNeeded()
-intermediateDir = getProjectIntermediateDirectory()
-moduleFilePath = getModuleFile()
+extraArgs = []
 
-updateLinkFileList(intermediateDir, moduleFilePath)
+if hasArg("-whole-module-optimization"):
+	print "swiftc workaround"
+	intermediateDir = getProjectIntermediateDirectory()
+	moduleFilePath = "%s%s" % (getProjectIntermediateDirectory(), getModuleFile())
+	updateLinkFileList(intermediateDir, moduleFilePath)
+	extraArgs = ["-num-threads", "0", "-o", moduleFilePath]
 
-extraArgs = ["-num-threads", "0", "-o", moduleFilePath]
 cmd = [swiftSymLink] + sys.argv[1:] + extraArgs
 #print cmd
 subprocess.call(cmd)
