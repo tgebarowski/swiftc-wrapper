@@ -87,4 +87,4 @@ if hasArg("-whole-module-optimization"):
 
 cmd = [swiftSymLink] + sys.argv[1:] + extraArgs
 #print cmd
-subprocess.call(cmd)
+exit(subprocess.call(cmd))
